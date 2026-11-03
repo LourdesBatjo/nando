@@ -1,0 +1,1092 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Admin Panel — Birthday Surprise Control</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Montserrat:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --black:#0e0f12;
+  --char:#16181d;
+  --slate:#22252c;
+  --gold:#C6A66B;
+  --gold-glow:rgba(198,166,107,0.25);
+  --beige:#D8CBB8;
+  --white:#F4F2EE;
+  --danger:#e05252;
+  --success:#4caf50;
+  --sans:"Inter",system-ui,sans-serif;
+  --nav:"Montserrat",system-ui,sans-serif;
+  box-sizing:border-box;
+}
+*,*::before,*::after{box-sizing:inherit}
+body{
+  margin:0;
+  min-height:100vh;
+  background:var(--black);
+  color:var(--white);
+  font-family:var(--sans);
+  font-size:14px;
+  line-height:1.6;
+}
+
+/* header */
+header{
+  position:sticky;
+  top:0;
+  z-index:50;
+  background:rgba(22,24,29,.92);
+  backdrop-filter:blur(14px);
+  border-bottom:1px solid rgba(198,166,107,.2);
+  padding:12px 20px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:1rem;
+}
+.brand-area{display:flex;align-items:center;gap:.8rem}
+.brand-area h1{
+  font-family:var(--nav);
+  font-size:1.05rem;
+  font-weight:700;
+  letter-spacing:.15em;
+  color:var(--gold);
+  margin:0;
+  text-transform:uppercase;
+}
+.badge{
+  font-size:.65rem;
+  letter-spacing:.12em;
+  padding:3px 8px;
+  border-radius:12px;
+  background:rgba(198,166,107,.15);
+  color:var(--beige);
+  border:1px solid rgba(198,166,107,.3);
+  text-transform:uppercase;
+}
+.header-actions{display:flex;align-items:center;gap:.6rem}
+
+/* buttons */
+button, .btn{
+  font-family:var(--nav);
+  font-size:.76rem;
+  font-weight:600;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  padding:.65rem 1.2rem;
+  border-radius:6px;
+  border:1px solid transparent;
+  cursor:pointer;
+  transition:all .25s ease;
+  text-decoration:none;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:.4rem;
+}
+.btn-gold{background:var(--gold);color:var(--black);border-color:var(--gold)}
+.btn-gold:hover{background:#d8b87d;box-shadow:0 0 16px var(--gold-glow)}
+.btn-outline{background:transparent;color:var(--gold);border-color:rgba(198,166,107,.4)}
+.btn-outline:hover{background:rgba(198,166,107,.15);border-color:var(--gold)}
+.btn-danger{background:transparent;color:var(--danger);border-color:rgba(224,82,82,.4)}
+.btn-danger:hover{background:rgba(224,82,82,.15);border-color:var(--danger)}
+.btn-sm{padding:.4rem .8rem;font-size:.68rem}
+
+/* layout */
+.container{max-width:1100px;margin:0 auto;padding:24px 16px 80px}
+
+/* tabs */
+.tabs{
+  display:flex;
+  gap:8px;
+  border-bottom:1px solid rgba(255,255,255,.08);
+  margin-bottom:24px;
+  overflow-x:auto;
+  padding-bottom:2px;
+}
+.tab-btn{
+  background:transparent;
+  color:var(--beige);
+  border:none;
+  border-bottom:2px solid transparent;
+  padding:10px 16px;
+  font-family:var(--nav);
+  font-size:.76rem;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  cursor:pointer;
+  white-space:nowrap;
+  border-radius:4px 4px 0 0;
+  transition:all .2s;
+}
+.tab-btn:hover{color:var(--white);background:rgba(255,255,255,.03)}
+.tab-btn.active{color:var(--gold);border-bottom-color:var(--gold);background:rgba(198,166,107,.08)}
+
+/* cards & forms */
+.card{
+  background:var(--char);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:10px;
+  padding:24px;
+  margin-bottom:24px;
+}
+.card-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:20px;
+  border-bottom:1px solid rgba(255,255,255,.06);
+  padding-bottom:12px;
+}
+.card-header h2{
+  font-family:var(--nav);
+  font-size:.95rem;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:var(--gold);
+  margin:0;
+}
+.form-grid{display:grid;grid-template-columns:1fr;gap:18px}
+@media(min-width:680px){.form-grid{grid-template-columns:1fr 1fr}}
+.form-group{display:flex;flex-direction:column;gap:6px}
+.form-group.full{grid-column:1/-1}
+label{font-size:.76rem;font-weight:500;color:var(--beige);letter-spacing:.05em}
+input[type="text"], input[type="password"], textarea, select{
+  background:var(--slate);
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:6px;
+  color:var(--white);
+  padding:10px 14px;
+  font-family:inherit;
+  font-size:.88rem;
+  outline:none;
+  transition:border-color .2s;
+}
+input:focus, textarea:focus, select:focus{border-color:var(--gold)}
+textarea{min-height:90px;resize:vertical}
+
+/* file upload styling */
+.file-upload-box{
+  display:flex;
+  align-items:center;
+  gap:16px;
+  background:var(--slate);
+  padding:12px 16px;
+  border-radius:8px;
+  border:1px dashed rgba(198,166,107,.4);
+}
+.preview-avatar{
+  width:64px;
+  height:64px;
+  border-radius:8px;
+  object-fit:cover;
+  border:1px solid var(--gold);
+  background:#000;
+  flex-shrink:0;
+}
+
+/* gallery management grid */
+.gallery-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill, minmax(200px, 1fr));
+  gap:16px;
+}
+.gallery-card{
+  background:var(--slate);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:8px;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+  position:relative;
+}
+.gallery-card img{
+  width:100%;
+  aspect-ratio:4/5;
+  object-fit:cover;
+  background:#000;
+}
+.gallery-card .card-body{padding:10px;display:flex;flex-direction:column;gap:6px;flex:1}
+.gallery-card .cap-text{font-size:.78rem;color:#dfdbd4;font-style:italic;min-height:32px}
+.gallery-card .card-actions{display:flex;gap:6px;margin-top:auto;padding-top:8px;border-top:1px solid rgba(255,255,255,.06)}
+
+/* letters management list */
+.letters-list{display:flex;flex-direction:column;gap:12px}
+.letter-item{
+  background:var(--slate);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:8px;
+  padding:14px 18px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  flex-wrap:wrap;
+}
+.letter-info{display:flex;align-items:center;gap:14px;min-width:240px}
+.letter-av{
+  width:46px;
+  height:46px;
+  border-radius:50%;
+  border:1px solid var(--gold);
+  display:grid;
+  place-items:center;
+  font-family:var(--nav);
+  font-size:1.1rem;
+  color:var(--gold);
+  background:var(--char);
+  flex-shrink:0;
+  overflow:hidden;
+}
+.letter-av img{width:100%;height:100%;object-fit:cover}
+.letter-meta h4{margin:0;font-size:.92rem;font-family:var(--nav)}
+.letter-meta p{margin:2px 0 0;font-size:.75rem;color:var(--beige)}
+.letter-snippet{flex:1;min-width:220px;font-size:.8rem;color:#bdb8b0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.letter-actions{display:flex;gap:8px}
+
+/* modal */
+.modal-overlay{
+  position:fixed;
+  inset:0;
+  z-index:100;
+  background:rgba(0,0,0,.85);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .25s ease;
+}
+.modal-overlay.open{opacity:1;pointer-events:auto}
+.modal-box{
+  background:var(--char);
+  border:1px solid rgba(198,166,107,.4);
+  border-radius:12px;
+  width:100%;
+  max-width:540px;
+  max-height:90vh;
+  overflow-y:auto;
+  padding:28px 24px;
+  box-shadow:0 20px 60px rgba(0,0,0,.8);
+  transform:scale(.95);
+  transition:transform .25s ease;
+}
+.modal-overlay.open .modal-box{transform:scale(1)}
+.modal-title{
+  font-family:var(--nav);
+  font-size:1.1rem;
+  letter-spacing:.12em;
+  color:var(--gold);
+  margin:0 0 18px;
+  text-transform:uppercase;
+}
+
+/* toast notification */
+#toast{
+  position:fixed;
+  bottom:24px;
+  right:24px;
+  z-index:200;
+  background:var(--slate);
+  color:var(--white);
+  border-left:4px solid var(--gold);
+  padding:12px 20px;
+  border-radius:6px;
+  font-size:.84rem;
+  box-shadow:0 10px 30px rgba(0,0,0,.7);
+  display:flex;
+  align-items:center;
+  gap:10px;
+  opacity:0;
+  transform:translateY(12px);
+  pointer-events:none;
+  transition:all .3s ease;
+}
+#toast.show{opacity:1;transform:translateY(0)}
+
+/* PIN auth gate */
+#pinGate{
+  position:fixed;
+  inset:0;
+  z-index:999;
+  background:var(--black);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+}
+.pin-card{
+  background:var(--char);
+  border:1px solid rgba(198,166,107,.4);
+  border-radius:12px;
+  padding:36px 28px;
+  max-width:380px;
+  width:100%;
+  text-align:center;
+  box-shadow:0 20px 80px rgba(0,0,0,.9);
+}
+.pin-card h2{
+  font-family:var(--nav);
+  font-size:1.15rem;
+  letter-spacing:.15em;
+  color:var(--gold);
+  margin:0 0 10px;
+  text-transform:uppercase;
+}
+.pin-card p{color:var(--beige);font-size:.82rem;margin:0 0 24px}
+.pin-card input{
+  width:100%;
+  text-align:center;
+  letter-spacing:.4em;
+  font-size:1.4rem;
+  padding:12px;
+  margin-bottom:20px;
+}
+
+@media(max-width:600px){
+  header{padding:10px 14px}
+  .brand-area h1{font-size:.9rem}
+  .badge{display:none}
+  .gallery-grid{grid-template-columns:repeat(2, 1fr)}
+  .letter-item{flex-direction:column;align-items:flex-start}
+  .letter-actions{width:100%;justify-content:flex-end}
+}
+</style>
+</head>
+<body>
+
+<!-- PIN Gate Modal -->
+<div id="pinGate">
+  <div class="pin-card">
+    <h2>Control Panel</h2>
+    <p>Masukkan PIN untuk mengakses pengaturan website</p>
+    <form id="pinForm" onsubmit="authPin(event)">
+      <input type="password" id="pinInput" maxlength="10" placeholder="••••" autofocus required>
+      <button type="submit" class="btn btn-gold" style="width:100%">Masuk</button>
+    </form>
+    <p style="margin-top:16px;font-size:.72rem;opacity:.7">PIN default: <strong>1234</strong></p>
+  </div>
+</div>
+
+<header>
+  <div class="brand-area">
+    <h1>Chapter 22</h1>
+    <span class="badge" id="apiStatus">Mode: LocalStorage</span>
+  </div>
+  <div class="header-actions">
+    <a href="index.html" target="_blank" class="btn btn-outline btn-sm">Buka Website ↗</a>
+    <button onclick="saveAllChanges()" class="btn btn-gold btn-sm">Simpan Semua</button>
+    <button onclick="logoutAdmin()" class="btn btn-outline btn-sm" style="color:var(--beige)">Keluar</button>
+  </div>
+</header>
+
+<main class="container">
+  <!-- Tabs Navigation -->
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('profile')">Profil & Ucapan</button>
+    <button class="tab-btn" onclick="switchTab('gallery')">Galeri Foto (<span id="galleryCount">0</span>)</button>
+    <button class="tab-btn" onclick="switchTab('letters')">Surat & Wishes (<span id="lettersCount">0</span>)</button>
+    <button class="tab-btn" onclick="switchTab('settings')">Cadangan & PIN</button>
+  </div>
+
+  <!-- TAB 1: PROFIL & KONTEN UTAMA -->
+  <section id="tab-profile" class="tab-content">
+    <div class="card">
+      <div class="card-header">
+        <h2>Foto Profil Utama</h2>
+      </div>
+      <div class="file-upload-box">
+        <img id="profilePreview" src="assets/images/birthday-person/profile.png" alt="Profile" class="preview-avatar" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'64\' height=\'64\' fill=\'%23C6A66B\' viewBox=\'0 0 24 24\'%3E%3Cpath d=\'M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z\'/%3E%3C/svg%3E'">
+        <div style="flex:1">
+          <label style="margin-bottom:6px;display:block">Unggah Foto Profil Baru</label>
+          <input type="file" id="profileFileInput" accept="image/*" onchange="handleProfileUpload(event)" style="font-size:.82rem">
+          <div style="margin-top:6px">
+            <input type="text" id="profilePathInput" placeholder="Atau masukkan path gambar" style="font-size:.78rem;width:100%" onchange="updateProfilePath(this.value)">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h2>Informasi Teman & Pesan Ucapan</h2>
+      </div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Nama Lengkap</label>
+          <input type="text" id="cfgName" placeholder="Nama Lengkap">
+        </div>
+        <div class="form-group">
+          <label>Tanggal Ulang Tahun</label>
+          <input type="text" id="cfgDate" placeholder="Mis. 3 November 2026">
+        </div>
+        <div class="form-group">
+          <label>Tagline Hero (Atas Judul)</label>
+          <input type="text" id="cfgHeroTag" placeholder="Mis. CHAPTER 22 • SPECIAL EDITION">
+        </div>
+        <div class="form-group">
+          <label>Judul Hero (Bisa gunakan baris baru)</label>
+          <input type="text" id="cfgHeroTitle" placeholder="Mis. See Beyond the Years">
+        </div>
+        <div class="form-group full">
+          <label>Pesan Doa & Ucapan Ulang Tahun Lengkap</label>
+          <textarea id="cfgHeroMsg" rows="5" placeholder="Tuliskan ucapan dan harapan terbaik..."></textarea>
+        </div>
+        <div class="form-group full">
+          <label>File Musik Latar (.mp3)</label>
+          <input type="text" id="cfgMusic" placeholder="Mis. assets/music/birthday-bgm.mp3 (kosongkan jika pakai musik ambient bawaan)">
+        </div>
+      </div>
+      <div style="margin-top:20px;display:flex;justify-content:flex-end">
+        <button onclick="saveProfile()" class="btn btn-gold">Simpan Profil</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- TAB 2: GALERI FOTO -->
+  <section id="tab-gallery" class="tab-content" style="display:none">
+    <div class="card">
+      <div class="card-header">
+        <h2>Koleksi Foto Kenangan</h2>
+        <button onclick="openAddPhotoModal()" class="btn btn-gold btn-sm">+ Tambah Foto</button>
+      </div>
+      <div id="galleryContainer" class="gallery-grid"></div>
+    </div>
+  </section>
+
+  <!-- TAB 3: SURAT & WISHES -->
+  <section id="tab-letters" class="tab-content" style="display:none">
+    <div class="card">
+      <div class="card-header">
+        <h2>Daftar Surat Sahabat</h2>
+        <button onclick="openAddLetterModal()" class="btn btn-gold btn-sm">+ Tambah Surat</button>
+      </div>
+      <div id="lettersContainer" class="letters-list"></div>
+    </div>
+  </section>
+
+  <!-- TAB 4: CADANGAN & PIN -->
+  <section id="tab-settings" class="tab-content" style="display:none">
+    <div class="card">
+      <div class="card-header">
+        <h2>Ganti PIN Admin</h2>
+      </div>
+      <div class="form-grid" style="max-width:420px">
+        <div class="form-group full">
+          <label>PIN Admin Baru</label>
+          <input type="password" id="newPinInput" placeholder="Masukkan 4 digit PIN baru">
+        </div>
+      </div>
+      <div style="margin-top:16px">
+        <button onclick="changePin()" class="btn btn-gold btn-sm">Simpan PIN Baru</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h2>Cadangan Data (data.js)</h2>
+      </div>
+      <p style="color:var(--beige);font-size:.85rem;margin-top:0">
+        Jika Anda ingin mempublikasikan website ini ke hosting statis (GitHub Pages, Vercel, Netlify), Anda bisa mengunduh atau menyalin file <code>data.js</code> yang sudah diperbarui.
+      </p>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <button onclick="copyDataJsCode()" class="btn btn-gold btn-sm">Salin Kode data.js</button>
+        <button onclick="downloadDataJs()" class="btn btn-outline btn-sm">Unduh File data.js</button>
+        <button onclick="resetToDefaults()" class="btn btn-danger btn-sm">Reset ke Default</button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- MODAL TAMBAH/EDIT FOTO GALERI -->
+<div id="photoModal" class="modal-overlay">
+  <div class="modal-box">
+    <h3 class="modal-title" id="photoModalTitle">Tambah Foto Galeri</h3>
+    <form id="photoForm" onsubmit="submitPhotoForm(event)">
+      <input type="hidden" id="photoEditIndex" value="-1">
+      <div class="form-group" style="margin-bottom:14px">
+        <label>Unggah Gambar dari Perangkat</label>
+        <input type="file" id="modalPhotoFile" accept="image/*" onchange="previewModalPhoto(event)">
+      </div>
+      <div class="form-group" style="margin-bottom:14px">
+        <label>Atau Path / URL Gambar</label>
+        <input type="text" id="modalPhotoSrc" placeholder="Mis. assets/images/gallery/photo1.jpg">
+      </div>
+      <div id="modalPhotoPreviewWrap" style="margin-bottom:14px;text-align:center;display:none">
+        <img id="modalPhotoPreview" src="" alt="Preview" style="max-height:180px;border-radius:6px;border:1px solid var(--gold)">
+      </div>
+      <div class="form-group" style="margin-bottom:14px">
+        <label>Caption Foto (Opsional)</label>
+        <input type="text" id="modalPhotoCaption" placeholder="Mis. Little moments, big memories">
+      </div>
+      <div class="form-group" style="margin-bottom:20px">
+        <label>Rasio Tampilan</label>
+        <select id="modalPhotoRatio">
+          <option value="4/5">4:5 (Potret / Vertikal)</option>
+          <option value="1/1">1:1 (Persegi)</option>
+          <option value="3/4">3:4 (Klasik)</option>
+          <option value="4/3">4:3 (Lanskap)</option>
+        </select>
+      </div>
+      <div style="display:flex;justify-content:flex-end;gap:10px">
+        <button type="button" onclick="closeModal('photoModal')" class="btn btn-outline btn-sm">Batal</button>
+        <button type="submit" class="btn btn-gold btn-sm">Simpan Foto</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- MODAL TAMBAH/EDIT SURAT -->
+<div id="letterModal" class="modal-overlay">
+  <div class="modal-box">
+    <h3 class="modal-title" id="letterModalTitle">Tambah Surat Sahabat</h3>
+    <form id="letterForm" onsubmit="submitLetterForm(event)">
+      <input type="hidden" id="letterEditIndex" value="-1">
+      <div class="form-group" style="margin-bottom:14px">
+        <label>Nama Pengirim</label>
+        <input type="text" id="modalLetterName" placeholder="Mis. Budi Santoso" required>
+      </div>
+      <div class="form-group" style="margin-bottom:14px">
+        <label>Hubungan / Relasi</label>
+        <input type="text" id="modalLetterRel" placeholder="Mis. Sahabat SMA, Teman Kuliah">
+      </div>
+      <div class="form-group" style="margin-bottom:14px">
+        <label>Foto Avatar Pengirim (Opsional)</label>
+        <input type="file" id="modalLetterFile" accept="image/*" onchange="previewLetterAvatar(event)">
+        <input type="text" id="modalLetterPhoto" placeholder="Atau path: assets/images/contributors/person1.jpg" style="margin-top:6px">
+      </div>
+      <div class="form-group" style="margin-bottom:20px">
+        <label>Isi Surat Ucapan</label>
+        <textarea id="modalLetterMsg" rows="6" placeholder="Tuliskan ucapan dan doa yang tulus..." required></textarea>
+      </div>
+      <div style="display:flex;justify-content:flex-end;gap:10px">
+        <button type="button" onclick="closeModal('letterModal')" class="btn btn-outline btn-sm">Batal</button>
+        <button type="submit" class="btn btn-gold btn-sm">Simpan Surat</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Toast -->
+<div id="toast"><span>Data berhasil disimpan!</span></div>
+
+<!-- Load base data -->
+<script src="assets/js/data.js"></script>
+<script>
+/* ============ ADMIN CONTROLLER ============ */
+let dataConfig = Object.assign({}, (typeof CONFIG !== 'undefined' && CONFIG) ? CONFIG : (window.CONFIG || {}));
+let dataGallery = (typeof GALLERY !== 'undefined' && Array.isArray(GALLERY)) ? [...GALLERY] : (Array.isArray(window.GALLERY) ? [...window.GALLERY] : []);
+let dataLetters = (typeof LETTERS !== 'undefined' && Array.isArray(LETTERS)) ? [...LETTERS] : (Array.isArray(window.LETTERS) ? [...window.LETTERS] : []);
+let isPhpActive = false;
+
+// 1. PIN AUTHENTICATION
+const PIN_KEY = "bday_admin_pin";
+function getAdminPin() {
+  return localStorage.getItem(PIN_KEY) || "1234";
+}
+function checkAuth() {
+  if (sessionStorage.getItem("bday_admin_auth") === "true") {
+    document.getElementById("pinGate").style.display = "none";
+  }
+}
+function authPin(e) {
+  e.preventDefault();
+  const input = document.getElementById("pinInput").value;
+  if (input === getAdminPin()) {
+    sessionStorage.setItem("bday_admin_auth", "true");
+    document.getElementById("pinGate").style.display = "none";
+    showToast("Berhasil masuk ke Admin Panel!");
+  } else {
+    alert("PIN Salah! Silakan coba lagi.");
+    document.getElementById("pinInput").value = "";
+  }
+}
+function logoutAdmin() {
+  sessionStorage.removeItem("bday_admin_auth");
+  window.location.reload();
+}
+function changePin() {
+  const newPin = document.getElementById("newPinInput").value.trim();
+  if (!newPin || newPin.length < 4) {
+    alert("PIN minimal harus 4 digit!");
+    return;
+  }
+  localStorage.setItem(PIN_KEY, newPin);
+  document.getElementById("newPinInput").value = "";
+  showToast("PIN Admin berhasil diubah!");
+}
+
+// 2. CHECK API STATUS (Laragon PHP check)
+async function testApi() {
+  try {
+    const res = await fetch("api.php?action=ping");
+    if (res.ok) {
+      const json = await res.json();
+      if (json.success) {
+        isPhpActive = true;
+        document.getElementById("apiStatus").textContent = "● Laragon PHP Aktif";
+        document.getElementById("apiStatus").style.color = "var(--gold)";
+      }
+    }
+  } catch(e) {
+    document.getElementById("apiStatus").textContent = "● Mode LocalStorage";
+  }
+}
+
+// 3. TABS SWITCHER
+function switchTab(tabName) {
+  document.querySelectorAll(".tab-btn").forEach(btn => btn.classList.remove("active"));
+  document.querySelectorAll(".tab-content").forEach(content => content.style.display = "none");
+  event.currentTarget.classList.add("active");
+  document.getElementById("tab-" + tabName).style.display = "block";
+}
+
+// 4. LOAD CURRENT DATA TO UI
+function initData() {
+  // Config
+  document.getElementById("cfgName").value = dataConfig.name || "";
+  document.getElementById("cfgDate").value = dataConfig.date || "";
+  document.getElementById("cfgHeroTag").value = dataConfig.heroTag || "CHAPTER 22 • SPECIAL EDITION";
+  document.getElementById("cfgHeroTitle").value = (dataConfig.heroTitle || "See Beyond\nthe Years").replace(/<br>/g, "\n");
+  document.getElementById("cfgHeroMsg").value = dataConfig.heroMsg || "";
+  document.getElementById("cfgMusic").value = dataConfig.music || "";
+  document.getElementById("profilePathInput").value = dataConfig.profile || "";
+  if (dataConfig.profile) {
+    document.getElementById("profilePreview").src = dataConfig.profile;
+  }
+
+  renderGallery();
+  renderLetters();
+}
+
+// 5. PROFILE HANDLER
+function updateProfilePath(src) {
+  dataConfig.profile = src;
+  document.getElementById("profilePreview").src = src;
+}
+async function handleProfileUpload(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  if (isPhpActive) {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("category", "profile");
+    formData.append("admin_pin", getAdminPin());
+    try {
+      showToast("Mengunggah foto profil...");
+      const res = await fetch("api.php?action=upload_image", {
+        method: "POST",
+        headers: { "X-Admin-PIN": getAdminPin() },
+        body: formData
+      });
+      const json = await res.json();
+      if (json.success) {
+        updateProfilePath(json.path);
+        document.getElementById("profilePathInput").value = json.path;
+        showToast("Foto profil berhasil diunggah!");
+        return;
+      }
+    } catch(err) {
+      console.warn("Upload fallback to base64", err);
+    }
+  }
+
+  // Base64 fallback
+  const reader = new FileReader();
+  reader.onload = (evt) => {
+    updateProfilePath(evt.target.result);
+    document.getElementById("profilePathInput").value = "Data URL (Tersimpan Lokal)";
+    showToast("Foto profil tersimpan di browser!");
+  };
+  reader.readAsDataURL(file);
+}
+function saveProfile() {
+  dataConfig.name = document.getElementById("cfgName").value.trim();
+  dataConfig.date = document.getElementById("cfgDate").value.trim();
+  dataConfig.heroTag = document.getElementById("cfgHeroTag").value.trim();
+  dataConfig.heroTitle = document.getElementById("cfgHeroTitle").value.trim();
+  dataConfig.heroMsg = document.getElementById("cfgHeroMsg").value.trim();
+  dataConfig.music = document.getElementById("cfgMusic").value.trim();
+  saveAllChanges();
+}
+
+// 6. GALLERY HANDLER
+function renderGallery() {
+  const wrap = document.getElementById("galleryContainer");
+  document.getElementById("galleryCount").textContent = dataGallery.length;
+  wrap.innerHTML = "";
+
+  if (dataGallery.length === 0) {
+    wrap.innerHTML = '<p style="color:var(--beige);grid-column:1/-1;text-align:center;padding:20px">Belum ada foto galeri. Klik tombol "+ Tambah Foto" di atas.</p>';
+    return;
+  }
+
+  dataGallery.forEach((item, idx) => {
+    const card = document.createElement("div");
+    card.className = "gallery-card";
+    const src = item.src || "data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'100\' height=\'100\' fill=\'%23C6A66B\' viewBox=\'0 0 24 24\'%3E%3Cpath d=\'M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z\'/%3E%3C/svg%3E";
+    card.innerHTML = `
+      <img src="${src}" alt="Foto ${idx+1}">
+      <div class="card-body">
+        <span style="font-size:.65rem;color:var(--gold);font-family:var(--nav);letter-spacing:.1em">FOTO #${idx+1} (${item.r || '4/5'})</span>
+        <div class="cap-text">${item.caption || '<span style="opacity:.4">Tanpa caption</span>'}</div>
+        <div class="card-actions">
+          <button onclick="moveGallery(${idx}, -1)" class="btn btn-outline btn-sm" style="padding:2px 8px" title="Geser ke kiri/atas" ${idx === 0 ? 'disabled' : ''}>▲</button>
+          <button onclick="moveGallery(${idx}, 1)" class="btn btn-outline btn-sm" style="padding:2px 8px" title="Geser ke kanan/bawah" ${idx === dataGallery.length-1 ? 'disabled' : ''}>▼</button>
+          <button onclick="editPhoto(${idx})" class="btn btn-gold btn-sm" style="flex:1">Edit</button>
+          <button onclick="deletePhoto(${idx})" class="btn btn-danger btn-sm" title="Hapus">✕</button>
+        </div>
+      </div>
+    `;
+    wrap.appendChild(card);
+  });
+}
+
+function openAddPhotoModal() {
+  document.getElementById("photoModalTitle").textContent = "Tambah Foto Galeri";
+  document.getElementById("photoEditIndex").value = "-1";
+  document.getElementById("modalPhotoSrc").value = "";
+  document.getElementById("modalPhotoCaption").value = "";
+  document.getElementById("modalPhotoRatio").value = "4/5";
+  document.getElementById("modalPhotoPreviewWrap").style.display = "none";
+  document.getElementById("modalPhotoFile").value = "";
+  openModal("photoModal");
+}
+
+function editPhoto(idx) {
+  const item = dataGallery[idx];
+  document.getElementById("photoModalTitle").textContent = "Edit Foto Galeri #" + (idx + 1);
+  document.getElementById("photoEditIndex").value = idx;
+  document.getElementById("modalPhotoSrc").value = item.src || "";
+  document.getElementById("modalPhotoCaption").value = item.caption || "";
+  document.getElementById("modalPhotoRatio").value = item.r || "4/5";
+  if (item.src) {
+    document.getElementById("modalPhotoPreview").src = item.src;
+    document.getElementById("modalPhotoPreviewWrap").style.display = "block";
+  } else {
+    document.getElementById("modalPhotoPreviewWrap").style.display = "none";
+  }
+  openModal("photoModal");
+}
+
+async function previewModalPhoto(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  if (isPhpActive) {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("category", "gallery");
+    formData.append("admin_pin", getAdminPin());
+    try {
+      showToast("Mengunggah foto...");
+      const res = await fetch("api.php?action=upload_image", {
+        method: "POST",
+        headers: { "X-Admin-PIN": getAdminPin() },
+        body: formData
+      });
+      const json = await res.json();
+      if (json.success) {
+        document.getElementById("modalPhotoSrc").value = json.path;
+        document.getElementById("modalPhotoPreview").src = json.path;
+        document.getElementById("modalPhotoPreviewWrap").style.display = "block";
+        showToast("Foto siap disimpan!");
+        return;
+      }
+    } catch(err) {
+      console.warn("Upload fallback", err);
+    }
+  }
+
+  const reader = new FileReader();
+  reader.onload = (evt) => {
+    document.getElementById("modalPhotoSrc").value = evt.target.result;
+    document.getElementById("modalPhotoPreview").src = evt.target.result;
+    document.getElementById("modalPhotoPreviewWrap").style.display = "block";
+  };
+  reader.readAsDataURL(file);
+}
+
+function submitPhotoForm(e) {
+  e.preventDefault();
+  const idx = parseInt(document.getElementById("photoEditIndex").value);
+  const src = document.getElementById("modalPhotoSrc").value.trim();
+  const caption = document.getElementById("modalPhotoCaption").value.trim();
+  const r = document.getElementById("modalPhotoRatio").value;
+
+  const newObj = { src, caption, r };
+  if (idx >= 0) {
+    dataGallery[idx] = newObj;
+  } else {
+    dataGallery.push(newObj);
+  }
+
+  closeModal("photoModal");
+  renderGallery();
+  saveAllChanges();
+  showToast("Galeri foto diperbarui!");
+}
+
+function moveGallery(idx, dir) {
+  const target = idx + dir;
+  if (target < 0 || target >= dataGallery.length) return;
+  const temp = dataGallery[idx];
+  dataGallery[idx] = dataGallery[target];
+  dataGallery[target] = temp;
+  renderGallery();
+  saveAllChanges();
+}
+
+function deletePhoto(idx) {
+  if (confirm(`Yakin ingin menghapus foto #${idx + 1}?`)) {
+    dataGallery.splice(idx, 1);
+    renderGallery();
+    saveAllChanges();
+    showToast("Foto dihapus!");
+  }
+}
+
+// 7. LETTERS HANDLER
+function renderLetters() {
+  const wrap = document.getElementById("lettersContainer");
+  document.getElementById("lettersCount").textContent = dataLetters.length;
+  wrap.innerHTML = "";
+
+  if (dataLetters.length === 0) {
+    wrap.innerHTML = '<p style="color:var(--beige);text-align:center;padding:20px">Belum ada surat ucapan. Klik tombol "+ Tambah Surat" di atas.</p>';
+    return;
+  }
+
+  dataLetters.forEach((l, idx) => {
+    const item = document.createElement("div");
+    item.className = "letter-item";
+    const initial = l.name ? l.name.charAt(0).toUpperCase() : "✦";
+    const avatarHtml = l.photo ? `<img src="${l.photo}" alt="${l.name}">` : initial;
+    item.innerHTML = `
+      <div class="letter-info">
+        <div class="letter-av">${avatarHtml}</div>
+        <div class="letter-meta">
+          <h4>#${idx + 1}. ${l.name || 'Tanpa Nama'}</h4>
+          <p>${l.relationship || 'Sahabat'}</p>
+        </div>
+      </div>
+      <div class="letter-snippet">${l.message || 'Belum ada isi pesan...'}</div>
+      <div class="letter-actions">
+        <button onclick="editLetter(${idx})" class="btn btn-gold btn-sm">Edit</button>
+        <button onclick="deleteLetter(${idx})" class="btn btn-danger btn-sm">Hapus</button>
+      </div>
+    `;
+    wrap.appendChild(item);
+  });
+}
+
+function openAddLetterModal() {
+  document.getElementById("letterModalTitle").textContent = "Tambah Surat Sahabat";
+  document.getElementById("letterEditIndex").value = "-1";
+  document.getElementById("modalLetterName").value = "";
+  document.getElementById("modalLetterRel").value = "";
+  document.getElementById("modalLetterPhoto").value = "";
+  document.getElementById("modalLetterMsg").value = "";
+  document.getElementById("modalLetterFile").value = "";
+  openModal("letterModal");
+}
+
+function editLetter(idx) {
+  const l = dataLetters[idx];
+  document.getElementById("letterModalTitle").textContent = "Edit Surat #" + (idx + 1);
+  document.getElementById("letterEditIndex").value = idx;
+  document.getElementById("modalLetterName").value = l.name || "";
+  document.getElementById("modalLetterRel").value = l.relationship || "";
+  document.getElementById("modalLetterPhoto").value = l.photo || "";
+  document.getElementById("modalLetterMsg").value = l.message || "";
+  document.getElementById("modalLetterFile").value = "";
+  openModal("letterModal");
+}
+
+async function previewLetterAvatar(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  if (isPhpActive) {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("category", "contributor");
+    formData.append("admin_pin", getAdminPin());
+    try {
+      showToast("Mengunggah foto pengirim...");
+      const res = await fetch("api.php?action=upload_image", {
+        method: "POST",
+        headers: { "X-Admin-PIN": getAdminPin() },
+        body: formData
+      });
+      const json = await res.json();
+      if (json.success) {
+        document.getElementById("modalLetterPhoto").value = json.path;
+        showToast("Foto avatar siap!");
+        return;
+      }
+    } catch(err) {
+      console.warn("Upload fallback", err);
+    }
+  }
+
+  const reader = new FileReader();
+  reader.onload = (evt) => {
+    document.getElementById("modalLetterPhoto").value = evt.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+function submitLetterForm(e) {
+  e.preventDefault();
+  const idx = parseInt(document.getElementById("letterEditIndex").value);
+  const name = document.getElementById("modalLetterName").value.trim();
+  const relationship = document.getElementById("modalLetterRel").value.trim();
+  const photo = document.getElementById("modalLetterPhoto").value.trim();
+  const message = document.getElementById("modalLetterMsg").value.trim();
+
+  const id = idx >= 0 ? (dataLetters[idx].id || (idx + 1)) : (dataLetters.length + 1);
+  const letterObj = { id, name, relationship, photo, message };
+
+  if (idx >= 0) {
+    dataLetters[idx] = letterObj;
+  } else {
+    dataLetters.push(letterObj);
+  }
+
+  closeModal("letterModal");
+  renderLetters();
+  saveAllChanges();
+  showToast("Surat berhasil disimpan!");
+}
+
+function deleteLetter(idx) {
+  if (confirm(`Yakin ingin menghapus surat dari ${dataLetters[idx].name || '#' + (idx + 1)}?`)) {
+    dataLetters.splice(idx, 1);
+    // Re-index IDs
+    dataLetters.forEach((item, i) => { item.id = i + 1; });
+    renderLetters();
+    saveAllChanges();
+    showToast("Surat dihapus!");
+  }
+}
+
+// 8. PERSISTENCE & SAVE
+async function saveAllChanges() {
+  // Save to localStorage
+  try {
+    localStorage.setItem("bday_config", JSON.stringify(dataConfig));
+    localStorage.setItem("bday_gallery", JSON.stringify(dataGallery));
+    localStorage.setItem("bday_letters", JSON.stringify(dataLetters));
+  } catch(e) {
+    console.warn("LocalStorage save error:", e);
+  }
+
+  // Save to disk via api.php if available
+  if (isPhpActive) {
+    try {
+      const payload = {
+        config: dataConfig,
+        gallery: dataGallery,
+        letters: dataLetters
+      };
+      const res = await fetch("api.php?action=save_data", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Admin-PIN": getAdminPin()
+        },
+        body: JSON.stringify(payload)
+      });
+      const json = await res.json();
+      if (json.success) {
+        showToast("Tersimpan permanen ke file data.js & browser!");
+        return;
+      }
+    } catch(err) {
+      console.warn("PHP Save failed, fallback to local:", err);
+    }
+  }
+
+  showToast("Semua perubahan tersimpan di browser!");
+}
+
+// 9. EXPORT & BACKUP
+function generateDataJsContent() {
+  let out = "/* ============ DATA WEBSITE ULANG TAHUN ============ */\n";
+  out += "window.CONFIG = " + JSON.stringify(dataConfig, null, 2) + ";\n\n";
+  out += "window.GALLERY = " + JSON.stringify(dataGallery, null, 2) + ";\n\n";
+  out += "window.LETTERS = " + JSON.stringify(dataLetters, null, 2) + ";\n\n";
+  out += "var CONFIG = window.CONFIG;\n";
+  out += "var GALLERY = window.GALLERY;\n";
+  out += "var LETTERS = window.LETTERS;\n\n";
+  out += "// Sinkronisasi otomatis dengan localStorage jika ada perubahan sesi\n";
+  out += "try {\n";
+  out += "  var localConfig = localStorage.getItem('bday_config');\n";
+  out += "  if (localConfig) { Object.assign(window.CONFIG, JSON.parse(localConfig)); CONFIG = window.CONFIG; }\n";
+  out += "  var localGallery = localStorage.getItem('bday_gallery');\n";
+  out += "  if (localGallery) { window.GALLERY = JSON.parse(localGallery); GALLERY = window.GALLERY; }\n";
+  out += "  var localLetters = localStorage.getItem('bday_letters');\n";
+  out += "  if (localLetters) { window.LETTERS = JSON.parse(localLetters); LETTERS = window.LETTERS; }\n";
+  out += "} catch (e) {\n";
+  out += "  console.warn('Storage sync error:', e);\n";
+  out += "}\n";
+  return out;
+}
+
+function copyDataJsCode() {
+  const code = generateDataJsContent();
+  navigator.clipboard.writeText(code).then(() => {
+    showToast("Kode data.js berhasil disalin ke clipboard!");
+  }).catch(() => {
+    alert("Gagal menyalin, periksa izin browser.");
+  });
+}
+
+function downloadDataJs() {
+  const code = generateDataJsContent();
+  const blob = new Blob([code], { type: "text/javascript" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "data.js";
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast("File data.js berhasil diunduh!");
+}
+
+function resetToDefaults() {
+  if (confirm("Reset semua pengaturan ke template acuan semula? Perubahan Anda saat ini akan dihapus.")) {
+    localStorage.removeItem("bday_config");
+    localStorage.removeItem("bday_gallery");
+    localStorage.removeItem("bday_letters");
+    window.location.reload();
+  }
+}
+
+// 10. MODAL HELPERS & TOAST
+function openModal(id) {
+  document.getElementById(id).classList.add("open");
+}
+function closeModal(id) {
+  document.getElementById(id).classList.remove("open");
+}
+function showToast(msg) {
+  const toast = document.getElementById("toast");
+  toast.querySelector("span").textContent = msg;
+  toast.classList.add("show");
+  setTimeout(() => toast.classList.remove("show"), 3200);
+}
+
+// Initial Run
+checkAuth();
+testApi();
+initData();
+</script>
+</body>
+</html>

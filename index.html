@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>A Chapter of 22 — Oloan Fernando Nainggolan</title>
+<meta name="color-scheme" content="dark">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;1,400;1,500&family=Inter:wght@300;400;500&family=Montserrat:wght@400;500;600&family=Playfair+Display:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body class="locked">
+<canvas id="bg" aria-hidden="true"></canvas>
+<div id="bar"></div>
+
+<section id="opening" aria-label="Pembuka">
+  <h1 class="num">22</h1>
+  <div class="who" id="op-name"></div>
+  <p>Some days are more special than others.</p>
+  <p>Today is one of them.</p>
+  <button class="btn" id="openBtn">Buka Surat kami</button>
+</section>
+
+<header>
+  <a href="#hero" class="brand">OLOAN FERNANDO NAINGGOLAN</a>
+  <nav aria-label="Navigasi">
+    <a href="#greeting">Greeting</a><a href="#gallery">Memories</a><a href="#letters">Letters</a><a href="#closing">Closing</a>
+  </nav>
+</header>
+
+<div id="music" role="group" aria-label="Pemutar musik">
+  <button id="pp" aria-label="Putar musik">▶</button>
+  <div class="eq" aria-hidden="true"><i></i><i></i><i></i></div>
+  <input id="vol" type="range" min="0" max="1" step="0.05" value="0.6" aria-label="Volume">
+  <span id="mstat" aria-live="polite"></span>
+</div>
+
+<main>
+  <section id="hero" class="hero-section">
+    <div class="hero-frame">
+      <div class="hero-bg-visual">
+        <img id="hero-img" src="assets/images/birthday-person/profile.png" alt="Oloan Fernando Nainggolan">
+        <div class="hero-vignette"></div>
+      </div>
+
+      <div class="hero-content">
+        <div class="hero-left rv">
+          <span class="hero-tag">CHAPTER 22 • HOPES </span>
+          <h1 class="hero-title">See Beyond and<br>the Years</h1>
+          <p class="hero-name" id="h-name"></p>
+        </div>
+      </div>
+
+      <a href="#greeting" class="hero-scroll rv" aria-label="Scroll ke ucapan ulang tahun">
+        <div class="scroll-pill"><span class="scroll-wheel"></span></div>
+        <span class="scroll-text">SCROLL DOWN</span>
+      </a>
+    </div>
+  </section>
+
+  <section id="greeting" class="greeting-section">
+    <div class="greeting-card rv">
+      <span class="greeting-tag">A CHAPTER OF 22</span>
+      <h2 class="greeting-title">Happy 22nd Birthday</h2>
+      <p class="greeting-sub">To someone who deserves all the beautiful things life has to offer.</p>
+      <div class="greeting-divider" aria-hidden="true"><span>✦</span></div>
+      <p class="greeting-msg">
+        22 tahun bukan hanya tentang bertambahnya usia, tetapi tentang perjalanan, pengalaman, dan setiap hal yang telah membentuk dirimu menjadi seseorang yang sekarang. Semoga kamu tetap menjadi pribadi yang tenang dalam menghadapi keadaan, sabar dalam setiap proses, dan bijak dalam mengambil keputusan. Semoga babak baru ini membawa kedamaian, kebahagiaan, kesehatan, dan hal-hal baik yang selama ini kamu perjuangkan.
+      </p>
+      <p class="greeting-date" id="h-date"></p>
+      <a class="hero-action" href="#gallery">
+        <span>START EXPLORING</span>
+        <span class="arrow" aria-hidden="true">→</span>
+      </a>
+    </div>
+  </section>
+
+  <section id="gallery">
+    <h2 class="rv">Little Moments and Memories</h2>
+    <p class="lead rv">Every picture has a story. Every story has a memory.</p>
+    <div class="grid" id="grid"></div>
+  </section>
+
+  <section id="letters">
+    <h2 class="rv" id="letters-title">14 Letters, 14 Wishes</h2>
+    <p class="lead rv">A few words from the people who are happy to be part of your story.</p>
+    <div class="grid" id="cards"></div>
+  </section>
+
+  <section id="closing">
+    <h2 class="rv">And the story continues…</h2>
+    <p class="rv">Terima kasih sudah menjadi pribadi yang tenang, sabar, dan bijak bagi orang-orang di sekitarmu. Apa pun yang menunggumu di babak berikutnya, semoga kamu selalu dikelilingi orang-orang baik.</p>
+    <p class="keep rv">Keep growing. Keep being you.</p>
+    <p class="final rv">HAPPY 22ND BIRTHDAY.</p>
+    <button class="btn rv" id="replay">Replay the surprise</button>
+    <small class="rv">Made with appreciation, memories, and a little bit of love.</small>
+  </section>
+</main>
+
+<dialog id="lt" aria-label="Surat"></dialog>
+<dialog id="lb" aria-label="Foto"></dialog>
+
+<script src="assets/js/data.js"></script>
+<script src="assets/js/utils.js"></script>
+<script src="assets/js/gallery.js"></script>
+<script src="assets/js/messages.js"></script>
+<script src="assets/js/music.js"></script>
+<script src="assets/js/main.js"></script>
+</body>
+</html>

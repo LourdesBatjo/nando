@@ -1,0 +1,7 @@
+# Robots.txt — Privasi Website Ulang Tahun
+User-agent: *
+Disallow: /admin.html
+Disallow: /api.php
+Disallow: /config.php
+Disallow: /assets/images/
+Allow: /
