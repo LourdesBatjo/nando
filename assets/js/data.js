@@ -68,7 +68,7 @@ window.LETTERS = [
         "name": "NATHALIA KODONG",
         "relationship": "Ibu Sekretaris",
         "photo": "assets/images/contributors/contributor_1793713666_40.jpg",
-        "message": "-"
+        "message": "Happy Birthday Ketua! Tetap jaya selalu dimanapun kamu berada, GOD BLESS U!!!✨🤟🏻"
     },
     {
         "id": 2,
